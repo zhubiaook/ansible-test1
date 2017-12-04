@@ -1,0 +1,37 @@
+---
+- name: Install tomcat
+  yum: name={{ item }} state=latest
+  with_items:
+  - tomcat
+  - tomcat-lib
+  - tomcat-webapps
+  - tomcat-admin-webapps
+  - tomcat-docs-webapp
+  tags: tomcat
+
+- name: Create directory for tomcat www
+  file: path="/var/lib/tomcat/webapps/www" state=directory
+  tags: tomcat
+
+- name: Create directory for tomcat mobile
+  file: path="/var/lib/tomcat/webapps/m" state=directory
+  tags: tomcat
+
+- name: Configure tomcat file
+  template: src={{ item.src }} dest={{ item.dest }} 
+  with_items:
+  - { src: "server.xml.j2",       dest: "/etc/tomcat/server.xml" }
+  - { src: "tomcat-users.xml.j2", dest: "/etc/tomcat/tomcat-users.xml" }
+  - { src: "context.xml.j2",      dest: "/etc/tomcat/context.xml" }
+  - { src: "www.index.jsp.j2",    dest: "/var/lib/tomcat/webapps/www/index.jsp" }
+  - { src: "m.index.jsp.j2",      dest: "/var/lib/tomcat/webapps/m/index.jsp" }
+  notify: Restart tomcat
+  tags: tomcat
+
+- name: Copy jar file for Tomcat connect to Redis
+  copy: src="jar/" dest="/usr/share/tomcat/lib/"
+  tags: tomcat
+
+- name: Start tomcat service
+  service: name=tomcat state=started enabled=yes
+  tags: tomcat

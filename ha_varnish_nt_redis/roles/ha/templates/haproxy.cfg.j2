@@ -1,0 +1,38 @@
+global
+	daemon
+	maxconn 50000
+	log 127.0.0.1 local0
+	uid 188
+	gid 188
+	pidfile /var/run/haproxy-private.pid
+
+frontend webs
+	bind 0.0.0.0:80
+	mode http
+	log global
+
+	timeout http-request 3s
+	timeout http-keep-alive 3s
+	timeout client 10s
+	option httplog
+	option forwardfor
+	option dontlognull
+	option http-keep-alive
+
+	capture request header Host len 30
+	capture request header Referer len 60
+	
+	acl www hdr_beg(host) -i www.zhubiaook.com
+	acl mobile hdr_beg(host) -i m.zhubiaook.com
+
+	use_backend www_servers if www
+	use_backend mobile_servers if mobile
+	default_backend www_servers
+
+backend www_servers
+	mode http
+	server vsrv1 varnish1.zhubiaook.com:6081
+
+backend mobile_servers
+	mode http
+	server vsrv2 varnish2.zhubiaook.com:6081

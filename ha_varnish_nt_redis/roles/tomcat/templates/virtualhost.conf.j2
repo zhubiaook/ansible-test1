@@ -1,0 +1,29 @@
+server {
+	listen 80;
+	server_name www.zhubiaook.com;
+	root /usr/share/nginx/html;
+
+	location / {
+		index index.html;
+	}
+
+	location ~* \.(jsp|do)$ {
+		proxy_pass http://127.0.0.1:8080;
+		proxy_set_header HOST $host;
+	}
+}
+
+server {
+	listen 80;
+	server_name m.zhubiaook.com;
+	root /usr/share/nginx/html;
+
+	location / {
+		index index.html;
+	}
+
+	location ~* \.(jsp|do)$ {
+		proxy_pass http://127.0.0.1:8080;
+		proxy_set_header HOST $host;
+	}
+}

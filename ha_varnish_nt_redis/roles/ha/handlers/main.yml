@@ -1,0 +1,11 @@
+- name: Restart haproxy
+  service: name=haproxy state=restarted
+  tags: haproxy
+
+- name: Restart master keepalived
+  service: name=keepalived state=restarted
+  tags: keepalived
+
+- name: Restart slave keepalived
+  service: name=keepalived state=restarted
+  tags: keepalived

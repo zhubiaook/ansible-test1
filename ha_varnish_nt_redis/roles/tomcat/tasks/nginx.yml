@@ -1,0 +1,13 @@
+---
+- name: Install nginx
+  yum: name=nginx state=latest
+  tags: nginx
+
+- name: Configure nginx file
+  template: src=virtualhost.conf.j2 dest=/etc/nginx/conf.d/virtualhost.conf 
+  notify: Restart nginx
+  tags: nginx
+
+- name: Start nginx service
+  service: name=nginx state=started enabled=yes
+  tags: nginx

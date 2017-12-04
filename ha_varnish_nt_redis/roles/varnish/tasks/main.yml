@@ -1,0 +1,13 @@
+---
+- name: Install varnish
+  yum: name=varnish state=latest
+  tags: varnish
+
+- name: Configure varnish file
+  template: src=default.vcl.j2 dest=/etc/varnish/default.vcl
+  notify: Reload varnish
+  tags: varnish
+
+- name: Start varnish service
+  service: name=varnish state=started
+  tags: varnish

@@ -1,0 +1,12 @@
+[local]
+name=local-repo
+enabled=1
+baseurl=file:///mnt/cd
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-$releasever
+
+[epel]
+name=epel-repo
+enabled=1
+baseurl=http://172.18.0.1/fedora-epel/$releasever/$basearch
+gpgcheck=0

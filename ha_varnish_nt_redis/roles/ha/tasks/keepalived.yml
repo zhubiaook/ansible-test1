@@ -1,0 +1,21 @@
+---
+- name: Install keepalived
+  yum: name=keepalived state=latest
+  tags: keepalived
+
+- name: Configure keepalived file of MASTER
+  template: src=master_keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  notify: Restart master keepalived
+  when: ansible_hostname == "ha1"
+  tags: keepalived
+
+- name: Configure keepalived file of BACKUP
+  template: src=backup_keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf
+  notify: Restart slave keepalived 
+  when: ansible_hostname == "ha2"
+  tags: keepalived
+
+
+- name: Start keepalived service
+  service: name=keepalived state=started
+  tags: keepalived

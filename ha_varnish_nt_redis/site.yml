@@ -1,0 +1,30 @@
+---
+- name: Apply common configuration to all nodes 
+  hosts: servs
+  remote_user: root
+  roles:
+  - common
+
+- name: Configure and deploy tomcat servers
+  hosts: tomcat
+  remote_user: root
+  roles:
+  - tomcat
+
+- name: Configure and deploy redis servers
+  hosts: redis
+  remote_user: root
+  roles:
+  - redis
+
+- name: Configure and deploy haproxy, keepalived servers
+  hosts: ha
+  remote_user: root
+  roles:
+  - ha
+
+- name: Configure and deploy varnish
+  hosts: varnish
+  remote_user: root
+  roles:
+  - varnish

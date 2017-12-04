@@ -1,0 +1,9 @@
+---
+- name: Configure yumrepos file
+  file: src=local.repo dest=/etc/yum.repos.d
+  notify: Clean yumrepos
+  tags: yum
+
+- name: Mount cdrom
+  mount: name=/mnt/cd src=/dev/cdrom state=mounted fstype=iso9660
+  tags: yum

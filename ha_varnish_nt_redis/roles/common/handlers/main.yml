@@ -1,0 +1,8 @@
+---
+- name: Restart ntpd srevice
+  service: name=ntpd state=restarted
+  tags: commn
+
+- name: Clean yumrepos
+  shell: /usr/bin/yum clean all
+  tags: yum

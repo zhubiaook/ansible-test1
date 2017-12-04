@@ -1,0 +1,44 @@
+# vcl version
+vcl 4.0;
+
+# Import directors
+import directors;
+
+# backend server
+backend serv1 {
+	.host = "172.18.17.24";
+	.port = "80";
+}
+
+backend serv2 {
+	.host = "172.18.17.25";
+	.port = "80";
+}
+
+
+# vcl_init
+sub vcl_init {
+	new webs = directors.round_robin();
+	webs.add_backend(serv1);
+	webs.add_backend(serv2);
+}
+
+# vcl_recv
+sub vcl_recv {
+	set req.backend_hint = webs.backend();
+	return(pass);
+}
+
+# vcl_backend_response
+sub vcl_backend_response {
+}
+
+# vcl_deliver
+sub vcl_deliver {
+	if(obj.hits>0){
+		set resp.http.X-Cache = "Hits: " + obj.hits + " ,Server: " + server.ip;
+	}else{
+		set resp.http.X-Cache = "Miss from server: " + server.ip;
+	}
+}
+
